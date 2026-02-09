@@ -1,3 +1,4 @@
+using System.Runtime.CompilerServices;
 using UnityEngine;
 
 [DefaultExecutionOrder(-100)]
@@ -15,8 +16,9 @@ public class ServiceHub : MonoBehaviour
     public static ServiceHub Instance { get; private set; }
 
 
-
-
+    [Header("system references")]
+    public GameStateManager gameStateManager;
+    public UIManager uIManager; 
 
     private void Awake()
     {
