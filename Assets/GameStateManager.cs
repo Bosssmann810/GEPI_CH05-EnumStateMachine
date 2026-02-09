@@ -10,14 +10,22 @@ public enum GameState
 }
 public class GameStateManager : MonoBehaviour
 {
+    public UIManager uimanager; 
     public GameState currentState { get; private set; }
     public GameState previousState { get; private set; }
     [Header("Debug(read only)")]
     [SerializeField] private string currentActiveState;
     [SerializeField] private string previousActiveState;
 
+    
+
     private void Start()
     {
+        uimanager = ServiceHub.Instance.uIManager;
+        if(uimanager == null)
+        {
+            Debug.LogError("no ui manager");
+        }
         SetState(GameState.Init);
         
     }
@@ -45,6 +53,7 @@ public class GameStateManager : MonoBehaviour
                 break;
             case GameState.MainMenu:
                 Debug.Log("Gamestate set to MainMenu");
+                uimanager.ShowMainMenu();
                 break;
             case GameState.None:
                 Debug.Log("Your not supposed to be here");
