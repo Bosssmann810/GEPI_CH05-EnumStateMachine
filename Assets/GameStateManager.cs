@@ -1,3 +1,4 @@
+using UnityEditor;
 using UnityEngine;
 
 public enum GameState
@@ -7,6 +8,8 @@ public enum GameState
     MainMenu,
     Gameplay,
     Paused,
+    GameOver,
+    Settings,
 }
 public class GameStateManager : MonoBehaviour
 {
@@ -54,40 +57,65 @@ public class GameStateManager : MonoBehaviour
             case GameState.MainMenu:
                 Debug.Log("Gamestate set to MainMenu");
                 uimanager.ShowMainMenu();
+                Time.timeScale = 1;
                 break;
             case GameState.None:
                 Debug.Log("Your not supposed to be here");
+                
                 break;
             case GameState.Paused:
                 Debug.Log("Gamestate set to Paused");
+                uimanager.ShowPausedUI();
+                Time.timeScale = 0;
                 break;
             case GameState.Gameplay:
                 Debug.Log("Gamestate set to gameplay");
+                uimanager.ShowGameplayUI();
+                Time.timeScale = 1;
                 break;
-        }
-
-
-        switch (previousState)
-        {
-            case GameState.Init:
-                Debug.Log("init deactivated");
+            case GameState.GameOver:
+                uimanager.GameOVer();
                 break;
-            case GameState.MainMenu:
-                Debug.Log("MainMenu deactivated");
-                break;
-            case GameState.None:
-                Debug.Log("none deactivated");
-                break;
-            case GameState.Paused:
-                Debug.Log("Paused deactivated");
-                break;
-            case GameState.Gameplay:
-                Debug.Log("gameplay deactivated");
+            case GameState.Settings:
+                uimanager.Settings();
                 break;
         }
     }
-    private void Update()
+
+
+    
+
+    public void TogglePause()
     {
-        
+        Debug.Log("test");
+        if(currentState == GameState.Paused) 
+        {
+            if (currentState == GameState.Gameplay) return;
+            SetState(GameState.Gameplay);
+        }
+        else if (currentState == GameState.Gameplay)
+        {
+            if (currentState == GameState.Paused) return;
+            SetState(GameState.Paused);
+        }
+    }
+    public void GameOver()
+    {
+        if(currentState == GameState.Gameplay)
+        {
+            SetState(GameState.GameOver);
+        }
+    }
+    public void BackToMenu()
+    {
+        SetState(GameState.MainMenu);
+    }
+    public void settings()
+    {
+        SetState(GameState.Settings);
+    }
+    public void back()
+    {
+        SetState(previousState);
     }
 }
